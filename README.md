@@ -4,18 +4,18 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 
 **5.82x faster** than pure Python implementations, optimized for tabular data and LLM applications.
 
-> 📦 **Single Repository**: This repository contains both the sync (`toon-parser`) and async (`toon-parser-async`) packages. Both are published separately on PyPI for your convenience.
+> **Note**: This repository contains both the sync (`toon-parser`) and async (`toon-parser-async`) packages. Both are published separately on PyPI for convenience.
 
 ---
 
 ## Features
 
-- ⚡ **Blazing Fast**: 5.82x average speedup (2.98x - 9.68x range)
-- 🔧 **Zero Dependencies**: Pure PyO3/Rust implementation
-- 🎯 **Optimized for Tabular Data**: Inline primitive conversions for common patterns
-- 🔄 **Async Support**: Native asyncio integration via `toon-parser-async` package
-- 🐍 **Python 3.8+**: abi3 wheels for broad compatibility
-- 📦 **Drop-in Replacement**: Compatible API with other TOON libraries
+- **High Performance**: 5.82x average speedup (2.98x - 9.68x range) over pure Python implementations
+- **Zero Dependencies**: Pure PyO3/Rust implementation with no runtime dependencies
+- **Optimized for Tabular Data**: Inline primitive conversions for common data patterns
+- **Async Support**: Native asyncio integration via `toon-parser-async` package
+- **Broad Compatibility**: Python 3.8+ with abi3 wheels
+- **Drop-in Replacement**: Compatible API with other TOON libraries
 
 ---
 
@@ -301,31 +301,29 @@ cargo bench
 
 ## Credits
 
-### 🌟 Special Thanks to Jimmy Stridh
+### Core Dependencies
 
-This library would not exist without the exceptional work of **[Jimmy Stridh](https://github.com/jimmystridh)** on [toon-rs](https://github.com/jimmystridh/toon-rs).
+**toon-rs** by [Jimmy Stridh](https://github.com/jimmystridh)
 
-Jimmy created an outstanding Rust implementation of the TOON format parser that serves as the foundation for `toon-parser`. His meticulous attention to performance, elegant API design, and comprehensive feature set made it possible to build these high-performance Python bindings.
+This library is built on [toon-rs](https://github.com/jimmystridh/toon-rs), a high-performance Rust implementation of the TOON format parser. The toon-rs library provides:
 
-**What makes toon-rs exceptional:**
-- 🚀 **Blazing fast** TOON ↔ JSON conversion with zero-copy optimizations
-- 🔍 **SIMD-accelerated** string scanning using memchr for maximum throughput
-- 💾 **Memory efficient** with stack allocations via smallvec
-- 🎯 **Production-ready** with robust error handling and extensive testing
-- 📊 **Feature-rich** with direct deserialization support and flexible options
-- 🧹 **Clean architecture** that made PyO3 bindings straightforward to implement
+- Fast TOON ↔ JSON conversion with zero-copy optimizations
+- SIMD-accelerated string scanning using memchr
+- Memory-efficient stack allocations via smallvec
+- Robust error handling and comprehensive testing
+- Direct deserialization support with flexible configuration
 
-The performance gains you see in `toon-parser` (5.82x average speedup) are a direct result of Jimmy's brilliant optimization work. Thank you for creating such a solid foundation! 🙏
+The performance characteristics of toon-parser are directly derived from the exceptional optimization work in toon-rs.
 
-### toon-parser Maintainer
-**magi8101** (sharmamagi0@gmail.com)
+### Maintainer
 
-Python bindings and optimizations built with PyO3.
+**magi8101** (sharmamagi0@gmail.com) - Python bindings and PyO3 integration
 
 ### Acknowledgments
-- [PyO3](https://github.com/PyO3/pyo3) team for excellent Python-Rust bindings
-- [Johann Schopplich](https://github.com/johannschopplich) and the [toon-format](https://github.com/toon-format) organization for creating and maintaining the [TOON Format Specification](https://github.com/toon-format/spec) - a brilliant, LLM-optimized serialization format that reduces token usage by 30-60%
-- Rust community for performance-focused tools and ecosystem
+
+- [PyO3](https://github.com/PyO3/pyo3) - Python-Rust FFI bindings
+- [TOON Format Specification](https://github.com/toon-format/spec) by Johann Schopplich and contributors
+- Rust community for the ecosystem and tooling
 
 ---
 
