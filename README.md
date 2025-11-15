@@ -191,7 +191,7 @@ See [PERFORMANCE.md](PERFORMANCE.md) for detailed analysis.
 - Zero-copy operations where possible
 - Optimized for TOON's common patterns (tabular data)
 
-**Async Wrapper (`python/atoonpy.py`)**
+**Async Wrapper (`atoonpy-package/toon_parser_async/`)**
 - Pure Python asyncio wrapper
 - Uses `asyncio.to_thread()` to release GIL
 - Enables concurrent I/O operations
