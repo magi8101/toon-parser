@@ -324,7 +324,7 @@ Python bindings and optimizations built with PyO3.
 
 ### Acknowledgments
 - [PyO3](https://github.com/PyO3/pyo3) team for excellent Python-Rust bindings
-- TOON format creators for the readable data format
+- [Johann Schopplich](https://github.com/johannschopplich) and the [toon-format](https://github.com/toon-format) organization for creating and maintaining the [TOON Format Specification](https://github.com/toon-format/spec) - a brilliant, LLM-optimized serialization format that reduces token usage by 30-60%
 - Rust community for performance-focused tools and ecosystem
 
 ---
