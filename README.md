@@ -4,6 +4,8 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 
 **5.82x faster** than pure Python implementations, optimized for tabular data and LLM applications.
 
+> 📦 **Single Repository**: This repository contains both the sync (`toon-parser`) and async (`toon-parser-async`) packages. Both are published separately on PyPI for your convenience.
+
 ---
 
 ## Features
@@ -11,7 +13,7 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 - ⚡ **Blazing Fast**: 5.82x average speedup (2.98x - 9.68x range)
 - 🔧 **Zero Dependencies**: Pure PyO3/Rust implementation
 - 🎯 **Optimized for Tabular Data**: Inline primitive conversions for common patterns
-- 🔄 **Async Support**: Native asyncio integration via `atoonpy` module
+- 🔄 **Async Support**: Native asyncio integration via `toon-parser-async` package
 - 🐍 **Python 3.8+**: abi3 wheels for broad compatibility
 - 📦 **Drop-in Replacement**: Compatible API with other TOON libraries
 
@@ -22,19 +24,31 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 ### From PyPI (Recommended)
 
 ```bash
-# Synchronous version
+# Synchronous version (Rust/PyO3)
 pip install toon-parser
 
-# Async version (includes toon-parser as dependency)
+# Async version (Pure Python wrapper, includes toon-parser)
 pip install toon-parser-async
 ```
+
+**Note:** Both packages are maintained in this single repository but published separately on PyPI.
 
 ### From Source
 
 ```bash
+# Clone this repository
+git clone https://github.com/magi8101/toon-parser.git
+cd toon-parser
+
+# Build sync version
 pip install maturin
 maturin build --release
 pip install target/wheels/toon_parser-*.whl
+
+# Build async version
+cd atoonpy-package
+pip wheel . --no-deps -w dist
+pip install dist/toon_parser_async-*.whl
 ```
 
 ---
