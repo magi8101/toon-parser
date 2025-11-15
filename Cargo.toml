@@ -1,0 +1,34 @@
+[package]
+name = "toonpy"
+version = "0.1.2"
+edition = "2021"
+authors = ["magi8101 <sharmamagi0@gmail.com>"]
+description = "Python bindings for TOON format parser"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/magi8101/toonpy"
+
+[lib]
+name = "toon_parser"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.27", features = ["extension-module", "abi3-py38"] }
+serde_json = "1.0"
+once_cell = "1.20"
+smallvec = "1.13"
+
+[dependencies.toon]
+git = "https://github.com/jimmystridh/toon-rs.git"
+features = ["json", "de_direct", "perf_memchr", "perf_smallvec", "perf_lexical"]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "micro_benchmarks"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
