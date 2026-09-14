@@ -3,8 +3,6 @@ use pyo3::BoundObject;
 use pyo3::exceptions::{PyValueError, PyException};
 use pyo3::types::{PyDict, PyList, PyTuple, PyBytes};
 use serde_json::Value;
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
 use once_cell::sync::Lazy;
 
 // Static default options to avoid repeated allocations
@@ -97,13 +95,6 @@ impl Options {
     
     fn __eq__(&self, other: &Self) -> bool {
         self.delimiter() == other.delimiter() && self.strict() == other.strict()
-    }
-    
-    fn __hash__(&self) -> u64 {
-        let mut hasher = DefaultHasher::new();
-        self.delimiter().hash(&mut hasher);
-        self.strict().hash(&mut hasher);
-        hasher.finish()
     }
 }
 
