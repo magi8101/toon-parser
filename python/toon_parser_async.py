@@ -26,15 +26,13 @@ async def loads(toon_str: str, **kwargs) -> Any:
 
 
 async def encode_batch(data_list: list, **kwargs) -> list:
-    """Encode multiple objects concurrently."""
-    tasks = [encode(data, **kwargs) for data in data_list]
-    return await asyncio.gather(*tasks)
+    """Encode multiple objects in a single off-thread batch call."""
+    return await asyncio.to_thread(toon_parser.encode_batch, data_list, **kwargs)
 
 
 async def decode_batch(toon_strs: list, **kwargs) -> list:
-    """Decode multiple TOON strings concurrently."""
-    tasks = [decode(s, **kwargs) for s in toon_strs]
-    return await asyncio.gather(*tasks)
+    """Decode multiple TOON strings in a single off-thread batch call."""
+    return await asyncio.to_thread(toon_parser.decode_batch, toon_strs, **kwargs)
 
 
 __all__ = ['encode', 'decode', 'dumps', 'loads', 'encode_batch', 'decode_batch']
