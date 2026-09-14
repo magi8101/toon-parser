@@ -4,7 +4,7 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 
 **5.82x faster** than pure Python implementations, optimized for tabular data and LLM applications.
 
-> **Note**: This repository contains both the sync (`toon-parser`) and async (`toon-parser-async`) packages. Both are published separately on PyPI for convenience.
+> **Note**: The `toon_parser` (sync) and `toon_parser_async` (async) modules ship together in a single package. Wheels are no longer published to PyPI — install directly with `pip` from GitHub instead (see below).
 
 ---
 
@@ -13,7 +13,7 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 - **High Performance**: 5.82x average speedup (2.98x - 9.68x range) over pure Python implementations
 - **Zero Dependencies**: Pure PyO3/Rust implementation with no runtime dependencies
 - **Optimized for Tabular Data**: Inline primitive conversions for common data patterns
-- **Async Support**: Native asyncio integration via `toon-parser-async` package
+- **Async Support**: Native asyncio integration via the bundled `toon_parser_async` module
 - **Broad Compatibility**: Python 3.8+ with abi3 wheels
 - **Drop-in Replacement**: Compatible API with other TOON libraries
 
@@ -21,17 +21,26 @@ High-performance Python bindings for the TOON format parser, built with PyO3 and
 
 ## Installation
 
-### From PyPI (Recommended)
+This project is no longer published to PyPI. Install directly with `pip` instead.
+
+### From a GitHub Release (Recommended)
 
 ```bash
-# Synchronous version (Rust/PyO3)
-pip install toon-parser
-
-# Async version (Pure Python wrapper, includes toon-parser)
-pip install toon-parser-async
+# Install a specific tagged release
+pip install https://github.com/magi8101/toon-parser/archive/refs/tags/vX.Y.Z.tar.gz
 ```
 
-**Note:** Both packages are maintained in this single repository but published separately on PyPI.
+Replace `vX.Y.Z` with the release tag from the [Releases page](https://github.com/magi8101/toon-parser/releases). `pip` builds the Rust extension locally via maturin's PEP 517 hook, so a Rust toolchain is required (see Building from Source below).
+
+### Directly from Git
+
+```bash
+# Latest commit on main
+pip install git+https://github.com/magi8101/toon-parser.git
+
+# A specific tag, branch, or commit
+pip install git+https://github.com/magi8101/toon-parser.git@vX.Y.Z
+```
 
 ### From Source
 
@@ -40,15 +49,11 @@ pip install toon-parser-async
 git clone https://github.com/magi8101/toon-parser.git
 cd toon-parser
 
-# Build sync version
+# Build and install (produces one wheel containing both
+# toon_parser and toon_parser_async)
 pip install maturin
 maturin build --release
 pip install target/wheels/toon_parser-*.whl
-
-# Build async version
-cd atoonpy-package
-pip wheel . --no-deps -w dist
-pip install dist/toon_parser_async-*.whl
 ```
 
 ---
@@ -77,11 +82,7 @@ results = toon_parser.decode_batch(toon_strs)
 
 ### Asynchronous API
 
-Install the async wrapper from PyPI:
-
-```bash
-pip install toon-parser-async
-```
+`toon_parser_async` is included in the same install (see Installation above) — no separate package needed.
 
 ```python
 import asyncio
@@ -139,14 +140,9 @@ Alias for `encode()`.
 #### `loads(toon_str, **kwargs) -> Any`
 Alias for `decode()`.
 
-### Asynchronous (`toon-parser-async`)
+### Asynchronous (`toon_parser_async`)
 
-Install the async package:
-```bash
-pip install toon-parser-async
-```
-
-All functions have the same signature as the sync API but return coroutines.
+Included in the same install as the sync package (see Installation above). All functions have the same signature as the sync API but return coroutines.
 
 ```python
 from toon_parser_async import encode, decode, encode_batch, decode_batch
@@ -191,7 +187,7 @@ See [PERFORMANCE.md](PERFORMANCE.md) for detailed analysis.
 - Zero-copy operations where possible
 - Optimized for TOON's common patterns (tabular data)
 
-**Async Wrapper (`atoonpy-package/toon_parser_async/`)**
+**Async Wrapper (`python/toon_parser_async.py`)**
 - Pure Python asyncio wrapper
 - Uses `asyncio.to_thread()` to release GIL
 - Enables concurrent I/O operations
