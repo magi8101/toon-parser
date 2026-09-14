@@ -436,16 +436,16 @@ fn decode_bytes<'py>(py: Python<'py>, toon_bytes: &[u8], options: Option<&Option
 
 /// Serialize Python data to TOON string (alias for encode).
 #[pyfunction]
-#[pyo3(text_signature = "(data)")]
-fn dumps<'py>(py: Python<'py>, data: &Bound<'py, PyAny>) -> PyResult<String> {
-    encode(py, data, None, None)
+#[pyo3(signature = (data, delimiter=None, strict=None), text_signature = "(data, delimiter=None, strict=None)")]
+fn dumps<'py>(py: Python<'py>, data: &Bound<'py, PyAny>, delimiter: Option<&str>, strict: Option<bool>) -> PyResult<String> {
+    encode(py, data, delimiter, strict)
 }
 
 /// Deserialize TOON string to Python data (alias for decode).
 #[pyfunction]
-#[pyo3(text_signature = "(toon_str)")]
-fn loads<'py>(py: Python<'py>, toon_str: &str) -> PyResult<Bound<'py, PyAny>> {
-    decode(py, toon_str, None, None)
+#[pyo3(signature = (toon_str, delimiter=None, strict=None), text_signature = "(toon_str, delimiter=None, strict=None)")]
+fn loads<'py>(py: Python<'py>, toon_str: &str, delimiter: Option<&str>, strict: Option<bool>) -> PyResult<Bound<'py, PyAny>> {
+    decode(py, toon_str, delimiter, strict)
 }
 
 /// Serialize Python data to TOON and write to file-like object.
@@ -453,10 +453,12 @@ fn loads<'py>(py: Python<'py>, toon_str: &str) -> PyResult<Bound<'py, PyAny>> {
 /// Args:
 ///     data: Python object to serialize
 ///     file: File-like object with write() method
+///     delimiter: Optional delimiter ('comma', 'tab', or 'pipe'). Default: 'comma'
+///     strict: Optional strict mode flag. Default: False
 #[pyfunction]
-#[pyo3(text_signature = "(data, file)")]
-fn dump<'py>(py: Python<'py>, data: &Bound<'py, PyAny>, file: &Bound<'py, PyAny>) -> PyResult<()> {
-    let toon_str = dumps(py, data)?;
+#[pyo3(signature = (data, file, delimiter=None, strict=None), text_signature = "(data, file, delimiter=None, strict=None)")]
+fn dump<'py>(py: Python<'py>, data: &Bound<'py, PyAny>, file: &Bound<'py, PyAny>, delimiter: Option<&str>, strict: Option<bool>) -> PyResult<()> {
+    let toon_str = dumps(py, data, delimiter, strict)?;
     file.call_method1("write", (toon_str,))?;
     Ok(())
 }
@@ -465,14 +467,16 @@ fn dump<'py>(py: Python<'py>, data: &Bound<'py, PyAny>, file: &Bound<'py, PyAny>
 ///
 /// Args:
 ///     file: File-like object with read() method
+///     delimiter: Optional delimiter hint ('comma', 'tab', or 'pipe'). Auto-detected if not specified
+///     strict: Optional strict mode flag. Default: False
 ///
 /// Returns:
 ///     Python object
 #[pyfunction]
-#[pyo3(text_signature = "(file)")]
-fn load<'py>(py: Python<'py>, file: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyAny>> {
+#[pyo3(signature = (file, delimiter=None, strict=None), text_signature = "(file, delimiter=None, strict=None)")]
+fn load<'py>(py: Python<'py>, file: &Bound<'py, PyAny>, delimiter: Option<&str>, strict: Option<bool>) -> PyResult<Bound<'py, PyAny>> {
     let content: String = file.call_method0("read")?.extract()?;
-    loads(py, &content)
+    loads(py, &content, delimiter, strict)
 }
 
 /// Convert JSON string to TOON format.
