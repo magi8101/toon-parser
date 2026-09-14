@@ -160,20 +160,13 @@ await decode_batch(toon_strs)
 
 ### Benchmark Results
 
-Tested against toon-llm v1.0.0b6 (November 2025):
+Benchmarked against other Python TOON libraries (`ctoon`, `toons`) using the shared harness in [`benchmarks/`](benchmarks/), where every library round-trips the exact same test data through a uniform encode/decode interface. Numbers below are regenerated automatically by the [benchmark workflow](.github/workflows/benchmark.yml), which opens a PR with the refreshed table whenever it's run (on demand, or after a tagged release) — this section may lag the latest run until that PR merges.
 
-| Test | toon-parser | toon-llm | Speedup |
-|------|--------|----------|---------|
-| Small Object Decode | 16.1 μs | 94.7 μs | **5.9x** |
-| Tabular Small Decode | 46.0 μs | 144.2 μs | **3.1x** |
-| Tabular Large Decode (1k rows) | 220.2 μs | 905.9 μs | **4.1x** |
-| Mixed Array Decode | 21.1 μs | 102.8 μs | **4.9x** |
-| Small Object Encode | 36.3 μs | 278.1 μs | **7.7x** |
-| Tabular Large Encode (1k rows) | 325.4 μs | 969.9 μs | **3.0x** |
+<!-- BENCHMARK_TABLE_START -->
+_No benchmark run has updated this table yet. Run `pip install -r benchmarks/requirements.txt && pytest benchmarks/ --benchmark-only` to generate one locally._
+<!-- BENCHMARK_TABLE_END -->
 
-**Average: 5.82x faster** (range: 2.98x - 9.68x)
-
-See [PERFORMANCE.md](PERFORMANCE.md) for detailed analysis.
+(`toon-format`, the official reference implementation, is excluded — its `encode()`/`decode()` currently raise `NotImplementedError` in the published package.)
 
 ---
 
