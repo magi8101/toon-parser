@@ -269,6 +269,11 @@ fn python_to_json<'py>(py: Python<'py>, obj: &Bound<'py, PyAny>) -> PyResult<Val
                 python_to_json(py, &v)?
             };
             
+            if map.contains_key(&key) {
+                return Err(PyValueError::new_err(format!(
+                    "Duplicate key '{}' after converting dict key to string", key
+                )));
+            }
             map.insert(key, value);
         }
         Ok(Value::Object(map))
