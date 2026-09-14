@@ -164,10 +164,21 @@ await decode_batch(toon_strs)
 
 ### Benchmark Results
 
-Benchmarked against other Python TOON libraries (`ctoon`, `toons`) using the shared harness in [`benchmarks/`](benchmarks/), where every library round-trips the exact same test data through a uniform encode/decode interface. Numbers below are regenerated automatically by the [benchmark workflow](.github/workflows/benchmark.yml), which opens a PR with the refreshed table whenever it's run (on demand, or after a tagged release) — this section may lag the latest run until that PR merges.
+Benchmarked against other Python TOON libraries (`ctoon`, `toons`) using the shared harness in [`benchmarks/`](benchmarks/), where every library round-trips the exact same test data through a uniform encode/decode interface. Each number is the median of 3 independent suite runs, to avoid one noisy run skewing the result. Going forward, numbers here are regenerated automatically by the [benchmark workflow](.github/workflows/benchmark.yml), which opens a PR with the refreshed table whenever it's run (on demand, or after a tagged release) — this section may lag the latest run until that PR merges.
+
+The table below is this harness's first result, run locally (median of 3 trials) rather than by the CI workflow, since the build was broken until the fixes in this same series of PRs landed.
 
 <!-- BENCHMARK_TABLE_START -->
-_No benchmark run has updated this table yet. Run `pip install -r benchmarks/requirements.txt && pytest benchmarks/ --benchmark-only` to generate one locally._
+| Test | toon-parser | ctoon | toons |
+|------|-------------|-------|-------|
+| mixed_array Decode | 1.5 μs | 1.2 μs (0.77x) | 1.2 μs (0.82x) |
+| mixed_array Encode | 1.6 μs | 1.1 μs (0.67x) | 3.4 μs (2.11x) |
+| small_object Decode | 1.5 μs | 0.9 μs (0.57x) | 0.9 μs (0.61x) |
+| small_object Encode | 0.9 μs | 0.8 μs (0.82x) | 2.9 μs (3.03x) |
+| tabular_large_1k Decode | 1055.6 μs | 484.6 μs (0.46x) | 450.6 μs (0.43x) |
+| tabular_large_1k Encode | 1300.2 μs | 422.7 μs (0.33x) | 1434.3 μs (1.10x) |
+| tabular_small Decode | 9.8 μs | 5.2 μs (0.53x) | 4.8 μs (0.49x) |
+| tabular_small Encode | 14.2 μs | 5.3 μs (0.37x) | 15.8 μs (1.11x) |
 <!-- BENCHMARK_TABLE_END -->
 
 (`toon-format`, the official reference implementation, is excluded — its `encode()`/`decode()` currently raise `NotImplementedError` in the published package.)

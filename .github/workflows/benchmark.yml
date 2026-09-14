@@ -29,11 +29,14 @@ jobs:
       - name: Install benchmark dependencies
         run: pip install -r benchmarks/requirements.txt
 
-      - name: Run benchmarks
-        run: pytest benchmarks/ --benchmark-only --benchmark-json=benchmark-results.json
+      - name: Run benchmarks (3 independent trials)
+        run: |
+          for i in 1 2 3; do
+            pytest benchmarks/ --benchmark-only --benchmark-json="benchmark-run-$i.json"
+          done
 
-      - name: Update README benchmark table
-        run: python benchmarks/render_readme_table.py benchmark-results.json README.md
+      - name: Update README benchmark table (median of the 3 runs)
+        run: python benchmarks/render_readme_table.py README.md benchmark-run-1.json benchmark-run-2.json benchmark-run-3.json
 
       - name: Open PR with refreshed results
         env:
