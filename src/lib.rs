@@ -10,11 +10,14 @@ use once_cell::sync::Lazy;
 // Static default options to avoid repeated allocations
 static DEFAULT_OPTIONS: Lazy<toon::Options> = Lazy::new(|| toon::Options::default());
 
-// Helper function to build toon::Options from optional parameters
+// Helper function to build toon::Options from optional parameters.
+// toon::Options::default() sets strict=true; our documented default is
+// false, so we always pin it explicitly before applying the caller's choice.
 #[inline]
 fn build_options(delimiter: Option<&str>, strict: Option<bool>) -> PyResult<toon::Options> {
     let mut opts = toon::Options::default();
-    
+    opts.strict = false;
+
     if let Some(d) = delimiter {
         opts.delimiter = match d {
             "comma" => toon::Delimiter::Comma,
@@ -25,11 +28,11 @@ fn build_options(delimiter: Option<&str>, strict: Option<bool>) -> PyResult<toon
             )),
         };
     }
-    
+
     if let Some(s) = strict {
         opts.strict = s;
     }
-    
+
     Ok(opts)
 }
 
@@ -49,24 +52,7 @@ impl Options {
     #[new]
     #[pyo3(signature = (delimiter=None, strict=None))]
     fn new(delimiter: Option<&str>, strict: Option<bool>) -> PyResult<Self> {
-        let mut opts = toon::Options::default();
-        
-        if let Some(delim) = delimiter {
-            opts.delimiter = match delim {
-                "comma" => toon::Delimiter::Comma,
-                "tab" => toon::Delimiter::Tab,
-                "pipe" => toon::Delimiter::Pipe,
-                _ => return Err(PyValueError::new_err(format!(
-                    "Invalid delimiter '{}'. Must be 'comma', 'tab', or 'pipe'", delim
-                ))),
-            };
-        }
-        
-        if let Some(s) = strict {
-            opts.strict = s;
-        }
-        
-        Ok(Options { inner: opts })
+        Ok(Options { inner: build_options(delimiter, strict)? })
     }
     
     #[getter]
