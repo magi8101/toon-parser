@@ -18,7 +18,9 @@ once_cell = "1.20"
 smallvec = "1.13"
 
 [dependencies.toon]
+package = "toon-rs"
 git = "https://github.com/jimmystridh/toon-rs.git"
+rev = "e80011112a3d54abe3c38edc362ff95c52134243"
 features = ["json", "de_direct", "perf_memchr", "perf_smallvec", "perf_lexical"]
 
 [dev-dependencies]
