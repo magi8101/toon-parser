@@ -1,0 +1,58 @@
+name: Benchmark
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build and install toon-parser
+        run: |
+          pip install maturin
+          maturin build --release --out dist
+          pip install dist/*.whl
+
+      - name: Install benchmark dependencies
+        run: pip install -r benchmarks/requirements.txt
+
+      - name: Run benchmarks
+        run: pytest benchmarks/ --benchmark-only --benchmark-json=benchmark-results.json
+
+      - name: Update README benchmark table
+        run: python benchmarks/render_readme_table.py benchmark-results.json README.md
+
+      - name: Open PR with refreshed results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No change in benchmark results, nothing to open a PR for."
+            exit 0
+          fi
+
+          BRANCH="benchmark-results-$(date -u +%Y%m%d%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add README.md
+          git commit -m "docs: refresh benchmark results"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Refresh benchmark results" \
+            --body "Automated run of the benchmark harness (workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
+            --base main \
+            --head "$BRANCH"

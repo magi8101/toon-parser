@@ -21,9 +21,9 @@ wheels/
 target/
 Cargo.lock
 .pytest_cache/
-benchmark_results.md
-benchmark.py
-test_*.py
+/benchmark_results.md
+/benchmark.py
+/test_*.py
 PERFORMANCE.md
 INTERNALS.md
 atoonpy-package/
